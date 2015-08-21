@@ -1,2 +1,13 @@
 1440171150226	Rename resource 'history.xml'
 1440173096449	Rename type 'PagerAdapter'
+1440190729040	Delete element
+1440190731435	Delete element
+1440190769682	Rename resource 'register.xml'
+1440190792602	Rename resource 'notofications.xml'
+1440190811509	Rename resource 'login.xml'
+1440190833124	Rename resource 'signin.xml'
+1440190868500	Rename resource 'register.xml'
+1440191001114	Rename resource 'login.xml'
+1440191024078	Rename type 'Notifications'
+1440191673483	Rename type 'Login'
+1440191682829	Rename type 'Register'

@@ -14,11 +14,11 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int index) {
 		switch (index) {
         case 0:
-            return new Login();
+            return new Pokes();
         case 1:
-            return new Register();
+            return new Contacts();
         case 2:
-            return new Notifications();
+            return new History();
         }
 		return null;
 	}

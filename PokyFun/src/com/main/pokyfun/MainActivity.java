@@ -15,7 +15,7 @@ public class MainActivity extends FragmentActivity implements
 	private ViewPager viewPager;
 	private TabsPagerAdapter mAdapter;
 	private ActionBar actionBar;
-	private String[] tabs = { "Notifications", "Register", "Login" };
+	private String[] tabs = { "Pokes", "Contacts", "History"};
 	ViewPager mViewPager;
 
 	@Override
