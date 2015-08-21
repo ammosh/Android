@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;PokyFun/res/layout/history.xml&apos; to &apos;notofications.xml&apos;" description="Rename resource &apos;history.xml&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="res/layout/history.xml" name="notofications.xml" stamp="1440171150226" updateReferences="true"/>
+</session>
