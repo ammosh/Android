@@ -1,21 +1,29 @@
 package com.main.pokyfun;
 
+import java.util.UUID;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
 	private ViewPager viewPager;
 	private TabsPagerAdapter mAdapter;
 	private ActionBar actionBar;
-	private String[] tabs = { "Pokes", "Contacts", "History"};
+	private String[] tabs = { "Pokes", "Contacts", "History" };
 	ViewPager mViewPager;
 
 	@Override
@@ -41,13 +49,21 @@ public class MainActivity extends FragmentActivity implements
 			public void onPageSelected(int position) {
 				actionBar.setSelectedNavigationItem(position);
 			}
+
 			@Override
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
 			}
+
 			@Override
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
+		
+		String deviceID = getDeviceID();
+		
+		if (!isLoginedIN(deviceID))
+			loadLogin();
+			
 
 	}
 
@@ -78,6 +94,43 @@ public class MainActivity extends FragmentActivity implements
 
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+
+	}
+
+	public boolean isLoginedIN(String deviceID) {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(getApplicationContext());
+		String ret = prefs.getString("deviceId", "");
+		if (ret.equalsIgnoreCase(deviceID))
+			return true;
+		else
+			return false;
+	}
+
+	public void loadLogin() {
+		Intent intent = new Intent(MainActivity.this, Login.class);
+		startActivity(intent);
+		MainActivity.this.finish();
+	}
+
+	public void showToast(String msg) {
+		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+	}
+
+	public String getDeviceID() {
+		final TelephonyManager tm = (TelephonyManager) getBaseContext()
+				.getSystemService(Context.TELEPHONY_SERVICE);
+		final String tmDevice, tmSerial, androidId;
+		tmDevice = "" + tm.getDeviceId();
+		tmSerial = "" + tm.getSimSerialNumber();
+		androidId = ""
+				+ android.provider.Settings.Secure.getString(
+						getContentResolver(),
+						android.provider.Settings.Secure.ANDROID_ID);
+		UUID deviceUuid = new UUID(androidId.hashCode(),
+				((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
+		String deviceId = deviceUuid.toString();
+		return deviceId;
 
 	}
 }
