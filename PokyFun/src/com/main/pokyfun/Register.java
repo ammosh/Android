@@ -31,16 +31,19 @@ public class Register extends Activity {
 	static InputStream is = null;
 	String json = "";
 	JSONObject jObj = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.register);
 		Bundle b = getIntent().getExtras();
-		postDate(b.getString("phoneId"), b.getString("deviceId"), b.getString("regId"), b.getString("email"));
+		postDate(b.getString("phoneId"), b.getString("deviceId"),
+				b.getString("regId"), b.getString("email"));
 	}
 
 	@SuppressWarnings("unchecked")
-	private void postDate(String phoneId, String deviceId, String regId, String email) {
+	private void postDate(String phoneId, String deviceId, String regId,
+			String email) {
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(phoneId);
 		params.add(deviceId);
@@ -67,45 +70,16 @@ public class Register extends Activity {
 							.get(2)));
 					nameValuePairs.add(new BasicNameValuePair("email", passed
 							.get(3)));
+					RequestHandler request = null;
+					jObj = request.send(Config.REGISTER_URL, "POST",
+							nameValuePairs);
 					try {
-						httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-						HttpResponse response = httpclient.execute(httppost);
-						HttpEntity httpEntity = response.getEntity();
-						is = httpEntity.getContent();
-						BufferedReader reader = new BufferedReader(
-								new InputStreamReader(is, "iso-8859-1"), 8);
-						StringBuilder sb = new StringBuilder();
-						String line = null;
-						while ((line = reader.readLine()) != null) {
-							sb.append(line + "\n");
-						}
-						is.close();
-						json = sb.toString();
-				        try {
-				            jObj = new JSONObject(json);
-				            int success = jObj.getInt(Config.TAG_SUCCESS);
-							if (success == 1) {
-								Log.d("User Created!", json.toString());
-								finish();
-								return jObj.getString(Config.MSG_KEY);
-							} else {
-								Log.d("Login Failure!", jObj.getString(Config.MSG_KEY));
-								return jObj.getString(Config.MSG_KEY);
-							}
-				        } catch (JSONException e) {
-				        	Log.e("JSON Parser", json);
-				        }
-				        
-					} catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					} catch (ClientProtocolException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
+						return jObj.getString(Config.MSG_KEY);
+					} catch (JSONException e) {
+						return "Error: " + e.getMessage();
 					}
-					return "Error!";
 				}
-				
+
 				@Override
 				protected void onPostExecute(String msg) {
 					showToast(msg);
@@ -118,9 +92,9 @@ public class Register extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 	}
+
 	public void showToast(String msg) {
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
 	}
