@@ -32,17 +32,14 @@ public class GcmMessageHandler extends IntentService {
 		mes = extras.getString(Config.MSG_KEY);
 		Log.i("GCM",
 				"Received : (" + messageType + ")  "
-						+ extras.getString("title"));
+						+ extras.getString("message"));
 		GcmBroadcastReceiver.completeWakefulIntent(intent);
-	}
-
-	public void showToast() {
 		handler.post(new Runnable() {
 			public void run() {
 				Toast.makeText(getApplicationContext(), mes, Toast.LENGTH_LONG)
 						.show();
 			}
 		});
-
 	}
+
 }
