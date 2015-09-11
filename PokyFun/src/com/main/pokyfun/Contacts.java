@@ -1,6 +1,8 @@
 package com.main.pokyfun;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.StringTokenizer;
 
 import android.content.ContentResolver;
@@ -116,13 +118,20 @@ public class Contacts extends Fragment {
 					phoneCursor.close();
 				}
 				if (output.length() > 0) {
-					list.add(output.toString());
 					listContacts.add(newC);
 				}
 			}
-			if (list.size() > 0)
+			if (listContacts.size() > 0){
+				Collections.sort(listContacts, new Comparator<Contact>(){
+					   public int compare(Contact b1, Contact b2) {
+						   return b1.name.compareTo(b2.name);
+					   }
+					});
+				for (int i = 0; i < listContacts.size(); i++) {
+					list.add(listContacts.get(i).name);
+				}
 				adapter.notifyDataSetChanged();
-
+			}
 		}
 	}
 

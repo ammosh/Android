@@ -56,7 +56,11 @@ public class GcmMessageHandler extends IntentService {
 				this).setSmallIcon(R.drawable.startup)
 				.setContentTitle(notificationTitle)
 				.setContentText(notificationMessage);
-		Intent intent = new Intent(this, MainActivity.class);
+		mBuilder.setAutoCancel(true);
+		Intent intent = new Intent(this, NotifyManager.class);
+		Bundle b = new Bundle();
+		b.putString("message", notificationMessage);
+		intent.putExtras(b);
 		PendingIntent resultPendingIntent =
 		    PendingIntent.getActivity(
 		    this,

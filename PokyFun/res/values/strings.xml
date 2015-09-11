@@ -12,4 +12,6 @@
 	<string name="msg_send">Send It!</string>
 	<string name="msg_content">message\.\.\.</string>
 	<string name="user_emai_address">insert@your.email</string>
+	<string name="play_btn">Play It!</string>
+	<string name="stop_txt">Stop</string>
 </resources>
