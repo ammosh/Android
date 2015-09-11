@@ -11,4 +11,5 @@
 	<string name="user_name">Name</string>
 	<string name="msg_send">Send It!</string>
 	<string name="msg_content">message\.\.\.</string>
+	<string name="user_emai_address">insert@your.email</string>
 </resources>

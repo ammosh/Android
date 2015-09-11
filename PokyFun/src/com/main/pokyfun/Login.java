@@ -21,6 +21,7 @@ import android.widget.Toast;
 public class Login extends Activity {
 	Button login;
 	EditText phoneNumber;
+	EditText emailAdd;
 	GoogleCloudMessaging gcm;
 	String regid;
 
@@ -43,8 +44,10 @@ public class Login extends Activity {
 	public void loginActivity() {
 		String deviceID = getDeviceID();
 		phoneNumber = (EditText) findViewById(R.id.a_number);
+		emailAdd = (EditText) findViewById(R.id.user_email);
 		String phoneId = phoneNumber.getText().toString();
-		getRegId(phoneId, deviceID);
+		String email = emailAdd.getText().toString();
+		getRegId(phoneId, deviceID, email);
 	}
 
 	public String getDeviceID() {
@@ -66,7 +69,7 @@ public class Login extends Activity {
 
 	}
 
-	public void getRegId(final String phoneId, final String deviceId) {
+	public void getRegId(final String phoneId, final String deviceId, final String email) {
 		new AsyncTask<Void, Void, String>() {
 			@Override
 			protected String doInBackground(Void... params) {
@@ -84,7 +87,9 @@ public class Login extends Activity {
 					prefs.edit().putString("phoneId", phoneId).commit();
 					prefs.edit().putString("deviceId", deviceId).commit();
 					prefs.edit().putString("regId", regid).commit();
-					loadMain();
+					prefs.edit().putString("email", email).commit();
+					
+					loadRegister(phoneId, deviceId, regid, email);
 				} catch (IOException ex) {
 					msg = "Error :" + ex.getMessage();
 				}
@@ -97,8 +102,14 @@ public class Login extends Activity {
 			}
 		}.execute(null, null, null);
 	}
-	public void loadMain() {
-		Intent intent = new Intent(Login.this, MainActivity.class);
+	public void loadRegister(String phoneId, String deviceId, String regId, String email) {
+		Bundle b = new Bundle();
+		b.putString("phoneId", phoneId);
+		b.putString("deviceId", deviceId);
+		b.putString("regId", regId);
+		b.putString("email", email);
+		Intent intent = new Intent(Login.this, Register.class);
+		intent.putExtras(b);
 		startActivity(intent);
 		Login.this.finish();
 	}

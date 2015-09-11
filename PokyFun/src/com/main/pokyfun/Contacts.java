@@ -1,8 +1,10 @@
 package com.main.pokyfun;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,8 +19,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+class Contact{
+	String name = "";
+	ArrayList<String> numbers = new ArrayList<String>();
+}
 public class Contacts extends Fragment {
 	ArrayList<String> list = new ArrayList<String>();
+	ArrayList<Contact> listContacts = new ArrayList<Contact>();
 	ListView listV;
 	ArrayAdapter<String> adapter;
 
@@ -34,11 +41,23 @@ public class Contacts extends Fragment {
 		listV.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-					long arg3) {
-				showToast(position);
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				if (position < list.size()){
+					Contact cnt = listContacts.get(position);
+					Intent intent = new Intent(getActivity(), SendPoke.class);
+					Bundle b = new Bundle();
+					b.putString("name", cnt.name);
+					String nums [] = new String[cnt.numbers.size()];
+					for (int i = 0; i < cnt.numbers.size(); i++) {
+						nums[i] = cnt.numbers.get(i);
+ 					}
+					b.putStringArray("numbers", nums);
+					intent.putExtras(b);
+					startActivity(intent);
+				}
 			}
-        });
+		});
 		return rootView;
 	}
 
@@ -77,10 +96,10 @@ public class Contacts extends Fragment {
 
 				int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor
 						.getColumnIndex(HAS_PHONE_NUMBER)));
-
+				Contact newC = new Contact();
 				if (hasPhoneNumber > 0) {
-
-					output.append("\n" + name);
+					newC.name = name;
+					output.append("Name: " + name);
 
 					// Query and loop for every phone number of the contact
 					Cursor phoneCursor = contentResolver.query(
@@ -91,30 +110,14 @@ public class Contacts extends Fragment {
 						phoneNumber = phoneCursor.getString(phoneCursor
 								.getColumnIndex(NUMBER));
 						output.append("\n" + phoneNumber);
-
+						newC.numbers.add(phoneNumber);
 					}
 
 					phoneCursor.close();
-
-					// Query and loop for every email of the contact
-					Cursor emailCursor = contentResolver.query(
-							EmailCONTENT_URI, null, EmailCONTACT_ID + " = ?",
-							new String[] { contact_id }, null);
-
-					while (emailCursor.moveToNext()) {
-
-						email = emailCursor.getString(emailCursor
-								.getColumnIndex(DATA));
-
-						output.append("\n" + email);
-
-					}
-
-					emailCursor.close();
 				}
 				if (output.length() > 0) {
-					output.append("\n");
 					list.add(output.toString());
+					listContacts.add(newC);
 				}
 			}
 			if (list.size() > 0)
@@ -122,10 +125,13 @@ public class Contacts extends Fragment {
 
 		}
 	}
+
 	public void showToast(int position) {
 		if (list != null && position < list.size())
-			Toast.makeText(getActivity().getApplicationContext(), list.get(position), Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity().getApplicationContext(),
+					list.get(position), Toast.LENGTH_LONG).show();
 		else
-			Toast.makeText(getActivity().getApplicationContext(), "Error: retreiving contact", Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity().getApplicationContext(),
+					"Error: retreiving contact", Toast.LENGTH_LONG).show();
 	}
 }

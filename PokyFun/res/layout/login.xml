@@ -17,6 +17,14 @@
             android:src="@drawable/startup" />
 
         <EditText
+            android:id="@+id/user_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/user_emai_address"
+            android:inputType="textEmailAddress" />
+
+        <EditText
             android:id="@+id/a_number"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
